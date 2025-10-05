@@ -17,20 +17,17 @@ frappe.ui.form.on('Sales Order', {
                             fieldname: "pos_profile",
                             fieldtype: "Link",
                             options: "POS Profile",
-                            reqd: 1,
                         },
                     ],
                     primary_action_label: __("Create"),
                     primary_action(values) {
                         d.hide();
-                        console.log(values.pos_profile, 2)
                         frappe.model.open_mapped_doc({
                             method: "isfc.overrides.function_overrides.make_sales_invoice",
                             frm: frm,
                             args: {
                                 pos_profile: values.pos_profile
-                            },
-                            run_link_triggers: true
+                            }
                         });
                     },
                 });

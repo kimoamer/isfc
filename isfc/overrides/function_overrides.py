@@ -31,7 +31,7 @@ def make_sales_invoice(source_name, target_doc=None, ignore_permissions=False):
 
     def set_missing_values(source, target):
         target.flags.ignore_permissions = True
-        target.run_method("set_missing_values")
+        # target.run_method("set_missing_values")
         target.run_method("set_po_nos")
         target.run_method("calculate_taxes_and_totals")
         target.run_method("set_use_serial_batch_fields")
@@ -144,5 +144,5 @@ def make_sales_invoice(source_name, target_doc=None, ignore_permissions=False):
     if args.get("pos_profile"):
         doclist.update({"is_pos": 1})
         doclist.update({"pos_profile": args.get("pos_profile")})
-        frappe.log_error("doclist",f"{doclist.as_dict()}")
+
     return doclist
