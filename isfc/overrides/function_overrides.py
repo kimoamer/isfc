@@ -112,9 +112,6 @@ def make_sales_invoice(source_name, target_doc=None, ignore_permissions=False):
                     "name": "so_detail",
                     "parent": "sales_order",
                     "rate": "rate",
-                    "price_list_rate": "price_list_rate",
-                    "discount_percentage": "discount_percentage",
-                    "discount_amount": "discount_amount"
                 },
                 "postprocess": update_item,
                 "condition": lambda doc: (
