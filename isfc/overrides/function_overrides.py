@@ -112,6 +112,7 @@ def make_sales_invoice(source_name, target_doc=None, ignore_permissions=False):
                     "name": "so_detail",
                     "parent": "sales_order",
                     "rate": "rate",
+                    "pricing_rules": "pricing_rules"
                 },
                 "postprocess": update_item,
                 "condition": lambda doc: (
