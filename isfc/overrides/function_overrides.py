@@ -91,11 +91,6 @@ def make_sales_invoice(source_name, target_doc=None, ignore_permissions=False):
         filtered_items = args.get("filtered_children", [])
         child_filter = d.name in filtered_items if filtered_items else True
         return child_filter
-    field_map = {
-                    "party_account_currency": "party_account_currency",
-                    "payment_terms_template": "payment_terms_template",
-                    "ignore_pricing_rule": "ignore_pricing_rule",
-                }
 
     doclist = get_mapped_doc(
         "Sales Order",
@@ -103,7 +98,11 @@ def make_sales_invoice(source_name, target_doc=None, ignore_permissions=False):
         {
             "Sales Order": {
                 "doctype": "Sales Invoice",
-                "field_map": field_map,
+                "field_map": {
+                    "party_account_currency": "party_account_currency",
+                    "payment_terms_template": "payment_terms_template",
+                    "ignore_pricing_rule": "ignore_pricing_rule",
+                },
                 "field_no_map": ["payment_terms_template"],
                 "validation": {"docstatus": ["=", 1]},
             },
@@ -142,5 +141,5 @@ def make_sales_invoice(source_name, target_doc=None, ignore_permissions=False):
     if args.get("pos_profile"):
         doclist.update({"is_pos": 1})
         doclist.update({"pos_profile": args.get("pos_profile")})
-
+    frappe.log_error("doclist",f"{doclist.as_dict()}")
     return doclist
