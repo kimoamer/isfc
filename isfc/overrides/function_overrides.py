@@ -1,4 +1,5 @@
 import frappe
+import json
 from frappe.contacts.doctype.address.address import get_company_address
 from frappe.model.utils import get_fetch_values
 from erpnext.accounts.party import get_party_account
@@ -44,7 +45,8 @@ def make_sales_invoice(source_name, target_doc=None, ignore_permissions=False):
 
         if target.company_address:
             target.update(get_fetch_values("Sales Invoice", "company_address", target.company_address))
-
+        if source.pricing_rules:
+            target.pricing_rules = source.pricing_rules
         # set the redeem loyalty points if provided via shopping cart
         if source.loyalty_points and source.order_type == "Shopping Cart":
             target.redeem_loyalty_points = 1
@@ -76,7 +78,13 @@ def make_sales_invoice(source_name, target_doc=None, ignore_permissions=False):
             if (source.qty and source.billed_amt)
             else (source.qty if is_unit_price_row(source) else source.qty - source.returned_qty)
         )
+        if source.pricing_rules:
+            target.pricing_rules = source.pricing_rules
+        if source.discount_percentage:
+            target.discount_percentage = source.discount_percentage
 
+        if source.discount_amount:
+            target.discount_amount = source.discount_amount 
         if source_parent.project:
             target.cost_center = frappe.db.get_value("Project", source_parent.project, "cost_center")
         if target.item_code:
@@ -102,6 +110,7 @@ def make_sales_invoice(source_name, target_doc=None, ignore_permissions=False):
                     "party_account_currency": "party_account_currency",
                     "payment_terms_template": "payment_terms_template",
                     "ignore_pricing_rule": "ignore_pricing_rule",
+                    "coupon_code" : "coupon_code"
                 },
                 "field_no_map": ["payment_terms_template"],
                 "validation": {"docstatus": ["=", 1]},
@@ -127,6 +136,7 @@ def make_sales_invoice(source_name, target_doc=None, ignore_permissions=False):
                 "reset_value": True,
             },
             "Sales Team": {"doctype": "Sales Team", "add_if_empty": True},
+            "Pricing Rule Detail" : {"doctype": "Pricing Rule Detail", "add_if_empty": True}
         },
         target_doc,
         postprocess,
@@ -142,5 +152,5 @@ def make_sales_invoice(source_name, target_doc=None, ignore_permissions=False):
     if args.get("pos_profile"):
         doclist.update({"is_pos": 1})
         doclist.update({"pos_profile": args.get("pos_profile")})
-    frappe.log_error("doclist",f"{doclist.as_dict()}")
+
     return doclist

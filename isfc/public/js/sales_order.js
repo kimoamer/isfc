@@ -17,7 +17,7 @@ frappe.ui.form.on('Sales Order', {
                             fieldname: "pos_profile",
                             fieldtype: "Link",
                             options: "POS Profile",
-                        },
+                        }
                     ],
                     primary_action_label: __("Create"),
                     primary_action(values) {

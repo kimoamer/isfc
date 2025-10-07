@@ -26,7 +26,7 @@ app_license = "mit"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/isfc/css/isfc.css"
-app_include_js = "/assets/isfc/js/sales_order.js?ver=4"
+app_include_js = "/assets/isfc/js/sales_order.js?ver=17"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/isfc/css/isfc.css"
@@ -43,7 +43,7 @@ app_include_js = "/assets/isfc/js/sales_order.js?ver=4"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-# doctype_js = {"Sales Order" : "public/js/sales_order.js?v=7"}
+# doctype_js = {"Sales Invoice" : "public/js/sales_invoice.js"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -130,7 +130,7 @@ app_include_js = "/assets/isfc/js/sales_order.js?ver=4"
 # Override standard doctype classes
 
 # override_doctype_class = {
-# 	"ToDo": "custom_app.overrides.CustomToDo"
+# 	"Sales Invoice": "isfc.overrides.sales_invoice.NewSalesInvoice"
 # }
 
 # Document Events
