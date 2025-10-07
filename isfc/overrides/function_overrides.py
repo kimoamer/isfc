@@ -34,7 +34,7 @@ def make_sales_invoice(source_name, target_doc=None, ignore_permissions=False):
         target.flags.ignore_permissions = True
         target.run_method("set_missing_values")
         target.run_method("set_po_nos")
-        target.run_method("calculate_taxes_and_totals")
+        # target.run_method("calculate_taxes_and_totals")
         target.run_method("set_use_serial_batch_fields")
 
         if source.company_address:
