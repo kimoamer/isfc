@@ -27,7 +27,8 @@ frappe.ui.form.on('Sales Order', {
                             frm: frm,
                             args: {
                                 pos_profile: values.pos_profile
-                            }
+                            },
+                            run_link_triggers: true
                         });
                     },
                 });

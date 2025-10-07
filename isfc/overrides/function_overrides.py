@@ -151,4 +151,5 @@ def make_sales_invoice(source_name, target_doc=None, ignore_permissions=False):
         doclist.update({"is_pos": 1})
         doclist.update({"pos_profile": args.get("pos_profile")})
 
+    # doclist.set_onload("load_after_mapping", False)
     return doclist
