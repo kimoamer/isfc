@@ -242,3 +242,8 @@ app_include_js = "/assets/isfc/js/sales_order.js?ver=19"
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
+
+
+override_doctype_class = {
+	"Sales Invoice": "isfc.overrides.sales_invoice.CustomSalesInvoice"
+}
