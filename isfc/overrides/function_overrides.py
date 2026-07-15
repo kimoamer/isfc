@@ -153,3 +153,5 @@ def make_sales_invoice(source_name, target_doc=None, ignore_permissions=False):
 
     # doclist.set_onload("load_after_mapping", False)
     return doclist
+
+

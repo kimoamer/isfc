@@ -2,6 +2,24 @@ import frappe
 from erpnext.accounts.doctype.sales_invoice.sales_invoice import SalesInvoice
 
 class CustomSalesInvoice(SalesInvoice):
+	def set_pos_fields(self, for_validate=False):
+		# Capture existing values mapped from Sales Order
+		mapped_apply_discount_on = self.get("apply_discount_on")
+		mapped_discount_amount = self.get("discount_amount")
+		mapped_additional_discount_percentage = self.get("additional_discount_percentage")
+
+		# Call standard set_pos_fields
+		super().set_pos_fields(for_validate)
+
+		# If mapped from a Sales Order, preserve the discount fields
+		if any(item.get("so_detail") for item in self.get("items")):
+			if mapped_apply_discount_on:
+				self.apply_discount_on = mapped_apply_discount_on
+			if mapped_discount_amount:
+				self.discount_amount = mapped_discount_amount
+			if mapped_additional_discount_percentage:
+				self.additional_discount_percentage = mapped_additional_discount_percentage
+
 	def set_missing_item_details(self, for_validate: bool = False):
 		# populate defaults first
 		super().set_missing_item_details(for_validate)
@@ -16,7 +34,14 @@ class CustomSalesInvoice(SalesInvoice):
 			row = frappe.db.get_value(
 				"Sales Order Item",
 				so_detail,
-				["rate", "price_list_rate", "discount_percentage", "discount_amount"],
+				[
+					"rate",
+					"price_list_rate",
+					"discount_percentage",
+					"discount_amount",
+					"item_tax_template",
+					"item_tax_rate",
+				],
 				as_dict=True,
 			)
 			if not row:

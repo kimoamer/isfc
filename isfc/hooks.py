@@ -245,5 +245,6 @@ app_include_js = "/assets/isfc/js/sales_order.js?ver=19"
 
 
 override_doctype_class = {
-	"Sales Invoice": "isfc.overrides.sales_invoice.CustomSalesInvoice"
+	"Sales Invoice": "isfc.overrides.sales_invoice.CustomSalesInvoice",
+	"Employee Advance": "isfc.overrides.employee_advance.EmployeeAdvanceOverride"
 }

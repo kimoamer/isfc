@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="pdfkit-page-size" content="A4">
+    <meta name="pdfkit-orientation" content="Portrait">
+    <meta name="pdfkit-margin-right" content="0mm">
+    <meta name="pdfkit-margin-left" content="0mm">
+    <meta name="pdfkit-margin-top" content="45mm">
+    <meta name="pdfkit-margin-bottom" content="45mm">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Lateef:wght@200;300;400;500;600;700;800&family=Scheherazade+New:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@100..900&family=Cairo:wght@200..1000&display=swap"
+        rel="stylesheet">
+    <title>Quotation SF</title>
+    <style>
+        .print-format {
+            margin-left: 0mm;
+            margin-right: 0mm;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        table {
+            width: 100%;
+            direction: ltr;
+        }
+
+        table th,
+        table td {
+            padding: 5px;
+            text-align: center;
+            font-size: 16px;
+            direction: ltr;
+        }
+
+        th {
+            background-color: #f0f0f0;
+        }
+        tr {
+            line-height: 1.2 !important;
+        }
+        .ql-editor.read-mode {
+
+            text-align: center;
+        }
+        .quotation-table tbody tr:nth-child(even) td {
+        background-color: #f5f5f5;
+    }
+    
+    .quotation-table tbody tr:nth-child(odd) td {
+        background-color: #e8e8e8;
+    }
+    .group-header {
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="header-html" class="hidden-pdf">
+        <div class="row">
+            <div class="col-xs-12" style="text-align: center;top: 0;">
+                <img src="/assets/isfc/images/seafood_header.png" width="100%">
+            </div>
+        </div>
+    </div>
+    <div class="page-break">
+        <div class="row">
+            <div class="col-xs-12" style="text-align: left;margin-top: 10px;padding-left: 50px;font-size: 15px;">
+              <b>  Issue Date : </b> {{ doc.transaction_date }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12" style="font-size: 16px;direction: ltr;text-align: center;padding-left: 10mm;padding-right: 10mm;">
+                <table style="width: 100%; border-collapse: collapse; direction: rtl;" class="quotation-table">
+                    <thead>
+                        <tr>
+                            <th
+                                style="background-color: white !important; border: 1px solid white; padding: 8px; text-align: center; font-weight: bold; width: 15%;">
+                              Price / Kg</th>
+                            <th
+                                style="background-color: white !important; border: 1px solid white; padding: 8px; text-align: center; font-weight: bold; width: 35%;">
+                                Description</th>
+                            <th
+                                style="background-color: white !important; border: 1px solid white; padding: 8px; text-align: center; font-weight: bold; width: 45%;">
+                                Item</th>
+                            <th
+                                style="background-color: white !important; border: 1px solid white; padding: 8px; text-align: center; font-weight: bold; width: 15%;">
+                                Origin</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set items_by_group = {} %}
+                        {% for item in doc.items %}
+                        {% if item.item_category not in items_by_group %}
+                       
+                        {% set _ = items_by_group.update({item.item_category: []}) %}
+                        {% endif %}
+                        {% set _ = items_by_group[item.item_category].append(item) %}
+                        {% endfor %}
+
+                        {% for group, group_items in items_by_group.items() %}
+                        <!-- Group Header -->
+                        <tr class="group-header">
+                            <td colspan="4"
+                                style="background-color: #ffcf9f; border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: bold; color: #000; font-size: 16px; page-break-after: avoid;">
+                                {{ group }}
+                            </td>
+                        </tr>
+
+                        <!-- Group Items -->
+                        {% for item in group_items %}
+                        <tr>
+                            <td
+                                style="padding: 6px; text-align: center; font-size: 14px;">
+                                {% if item.rate %}
+                                {{ "{:,.2f}".format(item.rate) }}
+                                {% endif %}
+                            </td>
+                            <td
+                                style="padding: 6px; text-align: center; font-size: 14px;">
+                                {{ item.description or item.item_name }}
+                            </td>
+                            <td
+                                style="padding: 6px; text-align: center; font-size: 14px;">
+                                {{ item.item_name or item.item_code }}
+                            </td>
+                            <td
+                                style="padding: 6px; text-align: center; font-size: 14px;">
+                                {% if item.item_origin %}
+                                {{ item.item_origin }}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-xs-12" style="font-size: 16px;direction: ltr;text-align: center;padding: 10mm;">
+                <div style="margin-top: 20px; font-size: 13px;">
+                    <table style="width: 100%;border: 0px solid white !important;">
+                        <tr>
+
+                            <td style="width: 50%; vertical-align: top; padding-left: 10px;border: 0px solid white !important;">
+                                <!-- English Terms -->
+                                <div style="direction: ltr;">
+                                    <div style=" padding: 8px;text-align: left;">
+                                        <strong>Terms and Conditions</strong>
+                                    </div>
+                                    <div style="padding: 10px;text-align: left;">
+                                        <ul style="margin: 0; padding-left: 20px; line-height: 1.6;font-weight: 200;font-size: 13px;">
+                                            <li>Prices are valid for 7 days from the issue date</li>
+                                            <li>Prices are exclusive of VAT</li>
+                                            <li>The offer is subject to product availability</li>
+                                            <li>Products must be inspected upon delivery</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td style="width: 50%; vertical-align: top; padding-right: 10px;border: 0px solid white !important;">
+                                <!-- Arabic Terms -->
+                                <div style="direction: rtl;">
+                                    <div style="padding: 8px;text-align: right;">
+                                        <strong>الشروط والأحكام</strong>
+                                    </div>
+                                    <div style="padding: 10px;text-align: right;">
+                                        <ul style="margin: 0; padding-right: 20px; line-height: 1.6;font-weight: 200;font-size: 13px;">
+                                            <li>الأسعار صالحة لمدة 7 أيام من تاريخ الإصدار</li>
+                                            <li>الأسعار شاملة ضريبة القيمة المضافة</li>
+                                            <li> العرض مشروط بتوافر المنتج</li>
+                                            <li>يجب فحص المنتجات عند التسليم</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div id="footer-html" class="visible-pdf">
+        <div class="letter-head-footer">
+            <div class="row">
+                <div class="col-xs-12" style="text-align: center;bottom: 0;">
+                    <img src="/assets/isfc/images/Footer.png" width="100%">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>
